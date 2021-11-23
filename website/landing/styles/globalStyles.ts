@@ -34,6 +34,9 @@ export const globalStyles = globalCss({
     fontFamily: "$base",
     margin: 0,
     overflowX: "hidden",
+    overscrollBehavior: "none",
+    "-webkit-font-smoothing": "antialiased",
+    "-moz-osx-font-smoothing": "grayscale",
   },
 
   "a, a:visited": {
