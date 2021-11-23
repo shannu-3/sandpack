@@ -1,3 +1,10 @@
+import {
+  ClasserProvider,
+  SandpackCodeEditor,
+  SandpackPreview,
+  SandpackProvider,
+  SandpackThemeProvider,
+} from "@codesandbox/sandpack-react";
 import type { CSS } from "@stitches/react";
 import {
   AnimateSharedLayout,
@@ -18,6 +25,7 @@ import {
 } from "../common";
 
 import { SandpackText } from "./SandpackText";
+import { app } from "./sandpackFiles";
 
 // LOGO CONSTANTS
 const BORDER_WIDTH = 2 * 14;
@@ -39,8 +47,12 @@ export const DesktopHero: React.FC = () => {
   const [heroScroll, setHeroScroll] = useState(0);
   const [heroWidth, setHeroWidth] = useState(0);
 
+  const [animationComplete, setAnimationComplete] = useState(false);
+
   // Subtitle should take 1/4 of the viewport's width
   const subTitleWidth = useMemo(() => heroWidth / 4, [heroWidth]);
+
+  // Aligns logo positions to the center
   const logoTranslateX = useMemo(
     () => ({
       left: BORDER_WIDTH / 2,
@@ -66,9 +78,10 @@ export const DesktopHero: React.FC = () => {
     [1, 0.975]
   );
 
+  const heroHeight = heroTop + heroScroll;
   const heroSlideAway = useTransform(
     scrollY,
-    [heroTop + heroScroll, heroTop + heroScroll + (2/3) * heroWidth],
+    [heroHeight, heroHeight + (2 / 3) * heroWidth], // 100vh = 2/3 of the hero's width.
     ["0", "-100%"]
   );
 
@@ -198,182 +211,262 @@ export const DesktopHero: React.FC = () => {
     return () => window.removeEventListener("resize", onResize);
   }, [heroRef, heroScroll, heroTop, heroWidth]);
 
-  return (
-    <AnimateSharedLayout>
-      <SectionWrapper>
-        <SectionContainer css={{ margin: 0, padding: 0, position: "relative" }}>
-          {/* Hero desktop wrapper */}
-          <AnimatedBox
-            css={{
-              alignItems: "flex-start",
-              bottom: 0,
-              display: "flex",
-              height: "100vh",
-              justifyContent: "flex-end",
-              overflow: "hidden",
-              position: "fixed",
-              top: 0,
-              width: "100vw",
-              maxWidth: "2560px",
+  useLayoutEffect(() => {
+    const onScroll = debounce(() => {
+      const hasCompleted = window.scrollY >= heroWidth * 0.9; // Arbitraty number
+      if (hasCompleted !== animationComplete) {
+        setAnimationComplete(hasCompleted);
+      }
+    }, 0);
 
-              "> *": {
-                flexShrink: 0,
-                height: "100%",
-                width: "100%",
-              },
-            }}
-            style={{ scale: heroContainerScale, translateY: heroSlideAway }}
-            layout
-          >
-            {/* Editor */}
-            <AnimatedBox
-              css={{
-                alignItems: "center",
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                position: "relative",
-                width: "50vw",
-              }}
-              style={{ translateX: editorTranslateX }}
-            ></AnimatedBox>
-            {/* Preview */}
-            <AnimatedBox
-              css={{
-                background: "$surface",
-                fontSize: "1vw" /* TODO: responsive font-sizes (?) */,
-                transformOrigin: "center right",
-                padding: "1rem 2rem",
-                width: "100vw",
-                maxWidth: "2560px",
-              }}
-              style={{ scaleX: previewContainerScaleX }}
-            >
-              {/* Preview content*/}
-              <Box
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [animationComplete, heroWidth]);
+
+  return (
+    <SandpackProvider
+      customSetup={{
+        files: { "/App.js": app },
+        dependencies: {
+          "framer-motion": "latest",
+          "@stitches/react": "latest",
+        },
+      }}
+      template="react"
+    >
+      <ClasserProvider
+        classes={{
+          "sp-layout": "custom-hero-layout",
+          "sp-stack": "custom-hero-stack",
+          "sp-wrapper": "custom-hero-wrapper",
+        }}
+      >
+        <SandpackThemeProvider theme="sandpack-dark">
+          <AnimateSharedLayout>
+            <SectionWrapper>
+              <SectionContainer
                 css={{
-                  alignItems: "center",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  overflow: "hidden",
+                  margin: 0,
+                  padding: 0,
                   position: "relative",
-                  width: "100%",
+                  ".custom-hero-stack": {
+                    height: "100%",
+                  },
                 }}
               >
-                {/* Preview header */}
+                {/* Hero desktop wrapper */}
                 <AnimatedBox
                   css={{
-                    alignItems: "center",
+                    alignItems: "flex-start",
+                    bottom: 0,
                     display: "flex",
-                    justifyContent: "space-between",
-                    transformOrigin: "top",
-                    width: "100%",
-                  }}
-                  style={{ scaleX: 1, scaleY: previewInnerScale }}
-                >
-                  <Clipboard />
-                  <Resources />
-                </AnimatedBox>
+                    height: "100vh",
+                    justifyContent: "flex-end",
+                    overflow: "hidden",
+                    position: "fixed",
+                    top: 0,
+                    width: "100vw",
+                    maxWidth: "2560px",
 
-                {/* Markup to align items to the center */}
-                <Box
-                  css={{
-                    alignItems: "center",
-                    display: "flex",
-                    justifyContent: "center",
-                    position: "relative",
+                    "> *": {
+                      flexShrink: 0,
+                      height: "100%",
+                      width: "100%",
+                    },
                   }}
+                  initial={false}
+                  style={{
+                    scale: heroContainerScale,
+                    translateY: heroSlideAway,
+                  }}
+                  layout
                 >
-                  {/* Subtitle (TODO: get from website.config.js) */}
-                  <AnimatedBox
-                    style={{
-                      opacity: previewSubtitleOpacity,
-                      scaleX: 1,
-                      scaleY: previewInnerScale,
-                    }}
-                  >
-                    <Text
-                      css={{
-                        fontSize: "1.2rem",
-                        lineHeight: 1.2,
-                        letterSpacing: "-0.0125em",
-                        margin: 0,
-                        textAlign: "center",
-                      }}
-                    >
-                      A component toolkit for creating your
-                      <br />
-                      own live running code editing experience,
-                      <br /> using the power of CodeSandbox.
-                    </Text>
-                  </AnimatedBox>
-
-                  {/* Logo */}
+                  {/* Editor */}
                   <AnimatedBox
                     css={{
                       alignItems: "center",
+                      height: "100%",
                       display: "flex",
-                      justifyContent: "center",
-                      position: "absolute",
-                      transformOrigin: "center center",
-                      top: "50%",
-                      zIndex: 1,
+                      flexDirection: "column",
+                      position: "relative",
+                      pointerEvents: animationComplete ? "auto" : "none",
+                      width: "50vw",
                     }}
+                    initial={false}
                     style={{
-                      rotate: logoRotate,
-                      scaleX: 1,
-                      scaleY: previewInnerScale,
-                      translateY: "-50%",
+                      translateX: editorTranslateX,
                     }}
                   >
-                    {/* Left side */}
-                    <AnimatedBox
-                      css={{ ...sharedLogoStyles }}
-                      style={{
-                        translateX: logoTranslateX.left,
-                        translateY: logoLeftTranslateY,
-                      }}
-                    />
-
-                    {/* Right side */}
-                    <AnimatedBox
-                      css={{ ...sharedLogoStyles }}
-                      style={{
-                        translateX: logoTranslateX.right,
-                        translateY: logoRightTranslateY,
-                      }}
-                    />
+                    <SandpackCodeEditor showTabs />
                   </AnimatedBox>
-                </Box>
 
-                {/* Sandpack Text (SVG) */}
-                <AnimatedBox
-                  css={{
-                    display: "flex",
-                    width: "100%",
-                    transformOrigin: "center bottom",
-                  }}
-                  style={{ scaleX: 1, scaleY: previewInnerScale }}
-                >
-                  <SandpackText width={`${heroWidth}px`} />
+                  {/* Preview */}
+                  <AnimatedBox
+                    css={{
+                      background: "$surface",
+                      fontSize: "1vw" /* TODO: responsive font-sizes (?) */,
+                      transformOrigin: "center right",
+                      padding: "1rem 2rem",
+                      width: "100vw",
+                      maxWidth: "2560px",
+                    }}
+                    initial={false}
+                    style={{ scaleX: previewContainerScaleX }}
+                  >
+                    {/* Preview content*/}
+                    <Box
+                      css={{
+                        alignItems: "center",
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        overflow: "hidden",
+                        position: "relative",
+                        width: "100%",
+                      }}
+                    >
+                      {/* Preview header */}
+                      <AnimatedBox
+                        css={{
+                          alignItems: "center",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          transformOrigin: "top",
+                          width: "100%",
+                        }}
+                        initial={false}
+                        style={{ scaleX: 1, scaleY: previewInnerScale }}
+                      >
+                        <Clipboard />
+                        <Resources />
+                      </AnimatedBox>
+
+                      {/* Markup to align items to the center */}
+                      <Box
+                        css={{
+                          alignItems: "center",
+                          display: "flex",
+                          justifyContent: "center",
+                          position: "absolute",
+                          transform: `translateY(calc(-50% - ${
+                            SIDE_HEIGHT / 4
+                          }px))`,
+                          top: "50%",
+                        }}
+                      >
+                        {/* Subtitle (TODO: get from website.config.js) */}
+                        <AnimatedBox
+                          initial={false}
+                          style={{
+                            opacity: previewSubtitleOpacity,
+                            scaleX: 1,
+                            scaleY: previewInnerScale,
+                          }}
+                        >
+                          <Text
+                            css={{
+                              fontSize: "1.2rem",
+                              lineHeight: 1.2,
+                              letterSpacing: "-0.0125em",
+                              margin: 0,
+                              textAlign: "center",
+                            }}
+                          >
+                            A component toolkit for creating your
+                            <br />
+                            own live running code editing experience,
+                            <br /> using the power of CodeSandbox.
+                          </Text>
+                        </AnimatedBox>
+
+                        {/* Logo */}
+                        <AnimatedBox
+                          css={{
+                            alignItems: "center",
+                            display: "flex",
+                            justifyContent: "center",
+                            position: "absolute",
+                            transformOrigin: "center center",
+                            top: "50%",
+                            zIndex: 1,
+                          }}
+                          initial={false}
+                          style={{
+                            rotate: logoRotate,
+                            scaleX: 1,
+                            scaleY: previewInnerScale,
+                            translateY: "-50%",
+                          }}
+                        >
+                          {/* Left side */}
+                          <AnimatedBox
+                            css={{ ...sharedLogoStyles }}
+                            initial={false}
+                            style={{
+                              translateX: logoTranslateX.left,
+                              translateY: logoLeftTranslateY,
+                            }}
+                          />
+
+                          {/* Right side */}
+                          <AnimatedBox
+                            css={{ ...sharedLogoStyles }}
+                            initial={false}
+                            style={{
+                              translateX: logoTranslateX.right,
+                              translateY: logoRightTranslateY,
+                            }}
+                          />
+                        </AnimatedBox>
+                      </Box>
+
+                      {/* Sandpack Text (SVG) */}
+                      <AnimatedBox
+                        css={{
+                          display: "flex",
+                          width: "100%",
+                          transformOrigin: "center bottom",
+                        }}
+                        initial={false}
+                        style={{ scaleX: 1, scaleY: previewInnerScale }}
+                      >
+                        <SandpackText width={`${heroWidth}px`} />
+                      </AnimatedBox>
+                    </Box>
+                  </AnimatedBox>
+                  <Box
+                    css={{
+                      position: "absolute",
+                      height: "100%",
+                      width: "50%",
+                      bottom: 0,
+                      visibility: animationComplete ? "visible" : "hidden",
+                      right: 0,
+                      transformOrigin: "top center",
+                      zIndex: animationComplete ? 2 : -1,
+                    }}
+                  >
+                    <SandpackPreview />
+                  </Box>
                 </AnimatedBox>
-              </Box>
-            </AnimatedBox>
-          </AnimatedBox>
-          {/* This ghost ref sets the hero dimensions  */}
-          <Box
-            ref={heroRef}
-            style={{
-              height: "150vw",
-              maxHeight: "2560px",
-              width: "100vw",
-              maxWidth: "2560px",
-            }}
-          />
-        </SectionContainer>
-      </SectionWrapper>
-    </AnimateSharedLayout>
+                {/* Sandpack Preview */}
+                {/* This ghost ref sets the hero dimensions  */}
+                <Box
+                  ref={heroRef}
+                  style={{
+                    height: "150vw",
+                    maxHeight: "2560px",
+                    width: "100vw",
+                    maxWidth: "2560px",
+                  }}
+                />
+              </SectionContainer>
+            </SectionWrapper>
+          </AnimateSharedLayout>
+        </SandpackThemeProvider>
+      </ClasserProvider>
+    </SandpackProvider>
   );
 };
