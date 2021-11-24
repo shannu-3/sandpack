@@ -8,7 +8,7 @@ export const ErrorOverlay: React.FC = () => {
   const c = useClasser("sp");
 
   if (!errorMessage) {
-    return undefined;
+    return null;
   }
   return (
     <div className={c("overlay", "error")} translate="no">
