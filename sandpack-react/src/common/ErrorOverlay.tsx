@@ -5,7 +5,7 @@ import { useErrorMessage } from "../hooks/useErrorMessage";
 
 export const ErrorOverlay: React.FC = () => {
   const errorMessage = useErrorMessage();
-  const c = useClasser("sp");
+  const c = useClasser("spf");
 
   if (!errorMessage) {
     return;
