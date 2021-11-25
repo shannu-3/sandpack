@@ -120,20 +120,32 @@
     "title": "Showcase",
     "highlights": [
       {
-        "title": "MDX",
-        "description": "Quisque commodo finibus metus nec viverra. Duis ultricies congue arcu, nec efficitur nibh pellentesque sed. Nullam convallis mi sem."
+        "title": "React docs",
+        "description": "Would you like to try out a solution right on the same page with the guides or examples? With Sandpack you can embed a playground right into your documentation.",
+        "img": "/assets/showcase/reactdocs.png",
+        "alt": "Screenshot of React Docs showing a custom sandpack component",
+        "link": "https://beta.reactjs.org/learn"
       },
       {
         "title": "Sound Demo",
-        "description": "Quisque commodo finibus metus nec viverra. Duis ultricies congue arcu, nec efficitur nibh pellentesque sed. Nullam convallis mi sem."
+        "description": "How about using sound in software to create an atmosphere around your actions? For example, code an epic task in a fantasy adventure or meditate in a buddhist mountain while fixing a bug.",
+        "img": "/assets/showcase/sounddemo.png",
+        "alt": "Screenshot of a totally custom IDE that uses sound",
+        "link": "https://code-sound.vercel.app/"
       },
       {
         "title": "Multiple Previews",
-        "description": "Quisque commodo finibus metus nec viverra. Duis ultricies congue arcu, nec efficitur nibh pellentesque sed. Nullam convallis mi sem."
+        "description": "For generative art or responsive design, Sandpack can render multiple previews to help you see all the variations you need.",
+        "img": "/assets/showcase/multiplepreview.png",
+        "alt": "Editor showing generative art in multiple previews",
+        "link": "https://codesandbox.io/s/multiple-previews-eyi5u"
       },
       {
-        "title": "Step by step code",
-        "description": "Quisque commodo finibus metus nec viverra. Duis ultricies congue arcu, nec efficitur nibh pellentesque sed. Nullam convallis mi sem."
+        "title": "Interactive blog post by Varun Vachhar",
+        "description": "Sandpack is perfectly suitable for blog posts. Provide examples for your readers to iterate on, but keep your code in a repo to easily maintain.",
+        "alt": "Screenshot of the blog bost from Varun Vachhar using Sandpack component",
+        "img": "/assets/showcase/interactiveblog.png",
+        "link": "https://varun.ca/modular-webgl/"
       }
     ]
   },

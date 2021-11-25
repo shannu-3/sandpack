@@ -13,7 +13,7 @@ import {
   Text,
 } from "../common";
 
-const ContentLandmark = () => {
+const ContentLandmark = ({ image, alt }) => {
   return (
     <Box
       css={{
@@ -25,6 +25,10 @@ const ContentLandmark = () => {
         justifyContent: "center",
         margin: "0 auto",
         width: "343px",
+
+        img: {
+          maxWidth: "100%",
+        },
 
         "@bp1": {
           width: "384px",
@@ -41,7 +45,7 @@ const ContentLandmark = () => {
         },
       }}
     >
-      <Text>content landmark.</Text>
+      <img src={image} alt={alt} />
     </Box>
   );
 };
@@ -100,9 +104,10 @@ export const Showcase: React.FC = () => {
                 },
               }}
             >
-              <ContentLandmark />
+              <ContentLandmark image={h.img} alt={h.alt} />
               <Card css={{ alignItems: "center" }}>
                 <CardTitle
+                  css={{ textAlign: "center" }}
                   dangerouslySetInnerHTML={{
                     __html: h.title,
                   }}
