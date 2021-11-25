@@ -2,7 +2,8 @@
 sidebar_position: 2
 ---
 
-import { SandpackProvider, SandpackLayout, SandpackCodeEditor, SandpackCodeViewer, SandpackTranspiledCode, SandpackPreview } from "@codesandbox/sandpack-react"
+import { SandpackProvider, SandpackCodeEditor, SandpackCodeViewer, SandpackTranspiledCode, SandpackPreview } from "@codesandbox/sandpack-react"
+import { SandpackLayout } from "../../src/CustomSandpack"
 
 # Components
 
@@ -45,7 +46,7 @@ const CustomSandpack = () => (
   </SandpackLayout>
 </SandpackProvider>
 
-And now we have pretty much the same component as the preset, minus the prop
+Further now we have pretty much the same component as the preset, minus the prop
 passing, which you can decide based on your specific needs.
 
 You can easily swap the two components inside the `SandpackLayout` to get a different instance of `Sandpack`.
@@ -66,7 +67,7 @@ You can easily swap the two components inside the `SandpackLayout` to get a diff
   </SandpackLayout>
 </SandpackProvider>
 
-`SandpackLayout` accepts a `theme` prop, so you can pass in your [custom theme object or a predefined theme](/docs/getting-started/custom-ui#theming).
+`SandpackLayout` accepts a `theme` prop, so you can pass in your [custom theme object or a predefined theme](/getting-started/custom-ui#theming).
 
 :::note Reminder
 If you do not want to use the `SandpackLayout` but still want to have style applied to the `sandpack` components according to the theme,
@@ -154,7 +155,7 @@ If you played with the `Sandpack` preset, you should be familiar already with th
 
 ## Code Viewer
 
-For situations when you strictly want to show some code and run it in the browser, you can use the `SandpackCodeViewer` component. It looks similar to the code editor, but it renders a readonly version of `codemirror`, so users will not be able to edit the code.
+For situations when you strictly want to show some code and run it in the browser, you can use the `SandpackCodeViewer` component. It looks similar to the code editor, but it renders a read-only version of `codemirror`, so users will not be able to edit the code.
 
 ```jsx
 <SandpackProvider template="react">

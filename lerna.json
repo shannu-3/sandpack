@@ -1,9 +1,13 @@
 {
-  "packages": ["sandpack-client", "sandpack-react"],
+  "packages": [
+    "sandpack-client",
+    "sandpack-react"
+  ],
   "npmClient": "yarn",
   "useWorkspaces": true,
   "command": {
     "version": {
+      "createRelease": "github",
       "conventionalCommits": true,
       "message": "chore: [skip ci] bump packages"
     },
@@ -12,5 +16,5 @@
       "message": "chore: [skip ci] bump packages"
     }
   },
-  "version": "0.0.0"
+  "version": "0.7.3"
 }

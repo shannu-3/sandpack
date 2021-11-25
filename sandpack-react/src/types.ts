@@ -33,6 +33,7 @@ export interface SandpackState {
   files: SandpackBundlerFiles;
   environment?: SandboxEnvironment;
   status: SandpackStatus;
+  initMode: SandpackInitMode;
 
   runSandpack: () => void;
   registerBundler: (iframe: HTMLIFrameElement, clientId: string) => void;
@@ -70,6 +71,7 @@ export type EditorState = "pristine" | "dirty";
 export interface SandboxTemplate {
   files: SandpackBundlerFiles;
   dependencies: Record<string, string>;
+  devDependencies?: Record<string, string>;
   entry: string;
   main: string;
   environment: SandboxEnvironment;
@@ -91,18 +93,36 @@ export interface SandpackSetup {
   environment?: SandboxEnvironment;
 }
 
+/**
+ * `immediate`: It immediately mounts all components, such as the code-editor
+ * and the preview - this option might overload the memory usage
+ * and resource from the browser on a page with multiple instances;
+ *
+ * `lazy`: Only initialize the components when the user is about to scroll
+ * them to the viewport and keep these components mounted until the user
+ * leaves the page - this is the default value;
+ *
+ * `user-visible`: Only initialize the components when the user is about
+ * to scroll them to the viewport, but differently from lazy, this option
+ * unmounts those components once it's no longer in the viewport.
+ */
+export type SandpackInitMode = "immediate" | "lazy" | "user-visible";
+
 export type SandboxEnvironment = ITemplate;
 
 export type SandpackPredefinedTemplate =
   | "angular"
   | "react"
+  | "react-ts"
   | "vanilla"
+  | "vanilla-ts"
   | "vue"
   | "vue3";
 
 export type SandpackPredefinedTheme =
-  | "codesandbox-light"
-  | "codesandbox-dark"
+  | "light"
+  | "dark"
+  | "sandpack-dark"
   | "night-owl"
   | "aqua-blue"
   | "github-light"
@@ -168,6 +188,9 @@ export type SandpackThemeProp =
   | SandpackPartialTheme
   | "auto";
 
+/**
+ * @hidden
+ */
 export type DeepPartial<Type> = {
   [Property in keyof Type]?: DeepPartial<Type[Property]>;
 };

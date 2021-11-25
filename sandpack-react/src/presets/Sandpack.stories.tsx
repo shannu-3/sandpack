@@ -54,6 +54,45 @@ export const ReactEditor: Story<SandpackProps> = (args) => (
   />
 );
 
+const reactCodeTsx = `import Button from './button';
+import Link from './link';
+
+export default function App(): JSX.Element {
+  return (
+    <div>
+      <h1>Hello World</h1>
+      <Button />
+      <Link />
+    </div>
+  )
+}
+`;
+
+const buttonCodeTsx = `export default function Button(): JSX.Element {
+  return <button>Click me</button>
+}
+`;
+
+const linkCodeTsx = `export default function Link(): JSX.Element {
+  return <a href="https://www.example.com" target="_blank">Click Here</a>
+}`;
+
+export const ReactTypescriptEditor: Story<SandpackProps> = (args) => (
+  <Sandpack
+    {...args}
+    files={{
+      "/src/App.tsx": reactCodeTsx,
+      "/src/button.tsx": buttonCodeTsx,
+      "/src/link.tsx": linkCodeTsx,
+    }}
+    options={{
+      showLineNumbers: true,
+      showInlineErrors: true,
+    }}
+    template="react-ts"
+  />
+);
+
 export const VueEditor: Story<SandpackProps> = (args) => (
   <Sandpack {...args} template="vue" theme="aqua-blue" />
 );
@@ -66,7 +105,19 @@ export const VanillaEditor: Story<SandpackProps> = (args) => (
       showNavigator: true,
     }}
     template="vanilla"
-    theme="codesandbox-dark"
+    theme="dark"
+  />
+);
+
+export const VanillaTypescriptEditor: Story<SandpackProps> = (args) => (
+  <Sandpack
+    {...args}
+    options={{
+      openPaths: ["/src/index.ts", "/src/styles.css", "/index.html"],
+      showNavigator: true,
+    }}
+    template="vanilla-ts"
+    theme="dark"
   />
 );
 
@@ -103,7 +154,7 @@ export const DarkTheme: Story<SandpackProps> = (args) => (
       },
     }}
     template="react"
-    theme="codesandbox-dark"
+    theme="dark"
   />
 );
 
@@ -237,7 +288,7 @@ export const MultipleInstances: Story<SandpackProps> = (args) => (
         showNavigator: true,
       }}
       template="react"
-      theme="codesandbox-dark"
+      theme="dark"
     />
     <h2>Night Owl</h2>
     <Sandpack

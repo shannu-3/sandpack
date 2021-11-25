@@ -6,6 +6,7 @@
     "sandpack-client",
     "sandpack-react",
     "website/docs",
+    "website/landing",
     "plugins/*"
   ],
   "nohoist": [
@@ -15,11 +16,13 @@
   "description": "",
   "scripts": {
     "lint": "eslint '**/*.ts?(x)' --fix",
-    "format": "prettier --write '**/*.{js,jsx,ts,tsx,md,mdx}'",
-    "build": "yarn workspaces run build",
+    "format": "prettier --write '**/*.{ts,tsx}'",
+    "build": "yarn workspace @codesandbox/sandpack-client run build && yarn workspace @codesandbox/sandpack-react run build",
     "prepare": "husky install",
     "clean": "yarn workspaces run clean",
-    "dev:docs": "yarn workspace sandpack-docs start"
+    "dev:docs": "yarn workspace sandpack-docs start",
+    "dev:react": "yarn workspace @codesandbox/sandpack-react storybook",
+    "dev:landing": "yarn workspace sandpack-landing dev -p 3001"
   },
   "repository": {
     "type": "git",

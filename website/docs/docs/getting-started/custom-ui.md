@@ -2,7 +2,9 @@
 sidebar_position: 4
 ---
 
-import { Sandpack, SandpackRunner } from "@codesandbox/sandpack-react"
+import { Sandpack } from "../../src/CustomSandpack";
+import { NestedSandpack } from "../../src/NestedSandpack";
+import { SandpackRunner } from "@codesandbox/sandpack-react"
 
 # Custom UI
 
@@ -16,65 +18,49 @@ The overall style can be set through the `theme` prop. Once again, sandpack offe
 
 Sandpack comes with some predefined themes:
 
-```jsx
-<Sandpack theme="codesandbox-dark" />
-<Sandpack theme="codesandbox-light" />
-<Sandpack theme="github-light" />
-<Sandpack theme="night-owl" />
-<Sandpack theme="aqua-blue" />
-<Sandpack theme="monokai-pro" />
-```
+To see all the themes at a glance, use [this sandbox](https://codesandbox.io/s/sandpack-theme-yqsmj)
 
-You can compare all the themes [in this sandbox](https://codesandbox.io/s/sandpack-theme-yqsmj)
+<!-- prettier-ignore -->
+<NestedSandpack nestedProps={`  // Try out the included themes below!
+    theme="codesandbox-dark"
+    // theme="codesandbox-light"
+    // theme="github-light"
+    // theme="night-owl"
+    // theme="aqua-blue"
+    // theme="monokai-pro"`}
+/>
 
 ### Custom Theme
 
 You can also pass a **partial** theme object that overrides properties in the
-**default** theme, which is `codesandbox-light`
+**default** theme, which is `codesandbox-light`.
 
-```jsx
-<Sandpack
-  theme={{
-    palette: {
-      accent: "rebeccapurple",
-    },
-    syntax: {
-      tag: "darkgreen",
-      string: "orange",
-    },
-  }}
-/>
-```
+<!-- prettier-ignore -->
+<NestedSandpack nestedProps={`    theme={{
+      palette: {
+        accent: "rebeccapurple",
+      },
+      syntax: {
+        tag: "#006400",
+        string: "rgb(255, 165, 0)",
+        plain: "tomato",
+      },
+    }}`}
+  />
 
-Your `Sandpack` instance should look like this:
+Furthermore you can import an existing theme object and use object composition to override specific fields.
 
-<Sandpack
-  theme={{
-    palette: {
-      accent: "rebeccapurple",
-    },
-    syntax: {
-      tag: "darkgreen",
-      string: "orange"
-    },
-  }}
-/>
-
-Or you can import an existing theme object and use object composition to override specific fields.
-
-```jsx
-import { Sandpack, codesandboxDarkTheme } from "@codesandbox/sandpack-react";
-
-<Sandpack
-  theme={{
-    ...codesandboxDarkTheme,
-    typography: {
-      fontSize: "16px",
-      bodyFont: "Arial",
-    },
-  }}
-/>
-```
+<!-- prettier-ignore -->
+<NestedSandpack 
+  setupCode={`import { Sandpack, codesandboxDarkTheme } from "@codesandbox/sandpack-react";`} 
+  nestedProps={`    theme={{
+      ...codesandboxDarkTheme,
+      typography: {
+        fontSize: "16px",
+        bodyFont: "Arial",
+      },
+    }}`}
+  />
 
 ## Custom Styling
 
@@ -82,7 +68,7 @@ Theming controls the color palette and typography, but you can also append your 
 
 For this, sandpack uses a small package called [`classer`](https://github.com/code-hike/codehike/tree/next/packages/classer). To customize existing components, you need to map your own classes to the internal sandpack classes.
 
-:::note 
+:::note
 While inspecting your Sandpack instance, notice that our components have classes prefixed with `sp-`.
 :::
 
@@ -95,7 +81,7 @@ While inspecting your Sandpack instance, notice that our components have classes
       "sp-wrapper": "custom-wrapper",
       "sp-layout": "custom-layout",
       "sp-tab-button": "custom-tab",
-    }
+    },
   }}
 />
 ```
@@ -106,25 +92,18 @@ This pattern is compatible with most modern styling systems, including Tailwind,
 
 ## Visual Options
 
-Some of the internal components of sandpack can be configured via the `options` prop. 
+Some of the internal components of sandpack can be configured via the `options` prop.
 
 ### Navigator
 
 By default `Sandpack` will show a refresh button in the lower part of the preview. Using `showNavigator` you can toggle on a full browser navigator component with: `back`, `forward` and `refresh buttons` as well as an input for the URL.
 
-```jsx
-<Sandpack
-  options={{
-    showNavigator: true,
-  }}
-/>
-```
-
-<Sandpack
-  template="react"
-  options={{
-    showNavigator: true,
-  }}
+<!-- prettier-ignore -->
+<NestedSandpack
+  nestedProps={`    template="react"
+      options={{
+        showNavigator: true,
+      }}`}
 />
 
 ### Tabs
@@ -133,14 +112,13 @@ File tabs are shown if more than one file is open. But you can force tabs to alw
 
 On top of that, the `closableTabs` prop allows you to add a small close button for each tab, which removes it from the list.
 
-```jsx
-<Sandpack
-  options={{
-    showTabs: true,
-    closableTabs: true,
-  }}
+<!-- prettier-ignore -->
+<NestedSandpack
+  nestedProps={`    options={{
+        showTabs: true,
+        closableTabs: true,
+      }}`}
 />
-```
 
 ### Editor Settings
 
@@ -155,17 +133,16 @@ you can adjust that with the `editorHeight` prop.
 
 Finally, you can specify the distribution between the width of the editor and that of the preview. The `SandpackLayout` component arranges the two in a flex layout, distributing the space between the editor and the preview according to this prop. A value of 60 for the `editorWidthPercentage` will mean the `Preview` gets 40% of the space.
 
-```jsx
-<Sandpack
-  options={{
-    showLineNumbers: false, // default - true
-    showInlineErrors: true, // default - false
-    wrapContent: true, // default - false
-    editorHeight: 350, // default - 300
-    editorWidthPercentage: 60, // default - 50
-  }}
+<!-- prettier-ignore -->
+<NestedSandpack
+  nestedProps={`    options={{
+        showLineNumbers: false, // default - true
+        showInlineErrors: true, // default - false
+        wrapContent: true, // default - false
+        editorHeight: 350, // default - 300
+        editorWidthPercentage: 60, // default - 50
+      }}`}
 />
-```
 
 ### Autorun
 
@@ -173,18 +150,20 @@ By default, the bundling process will start as soon as the component is getting
 closer to the viewport, or when the page loads, if the component is already in
 the viewport. But you can allow users to trigger the process manually.
 
-```jsx
-<Sandpack options={{ autorun: false }} template="react" />
-```
-
 When a `sandpack` instance is not set on `autorun`, which is the default
 setting, it will show a `Run` button that initializes the bundling process. This can be handy in situations in which you don't want multiple sandpack instances to run everytime the user loads the page.
 
-<Sandpack options={{ autorun: false }} template="react" />
+<!-- prettier-ignore -->
+<NestedSandpack
+  nestedProps={`    template="react"
+      options={{
+        autorun: false
+      }}`}
+/>
 
 ### Recompile Mode
 
-The `recompileMode` option also allow you configure what happens when the user starts typing in the code editor. The `immediate` mode will fire the change to the bundler as soon as it is received, while the `delayed` mode will debounce the bundler operation until the user starts typing. Optionally, you can set the delay for the debounce, which by default is `500ms`.
+The `recompileMode` option also allows you configure what happens when the user starts typing in the code editor. The `immediate` mode will fire the change to the bundler as soon as it is received, while the `delayed` mode will debounce the bundler operation until the user starts typing. Optionally, you can set the delay for the debounce, which by default is `500ms`.
 
 By default, the mode is set to `delayed` to ensures the bundler doesn't run on each keystroke. You can customize this
 experience by modifying the `recompileDelay` value or by setting the
@@ -215,7 +194,6 @@ preset.
 However, your input will be sent through the `code` prop. This is a single
 string that will replace the main file of the project.
 
-
 ```jsx
 import { SandpackRunner } from "@codesandbox/sandpack-react";
 
@@ -226,16 +204,14 @@ const code = `export default function App() {
 <SandpackRunner code={code} template="react" />;
 ```
 
-<SandpackRunner code={`export default function App() {
-  return <h1>Hello CodeSandbox</h1>
-}`} template="react" />
+<SandpackRunner code={`export default function App() { return <h1>Hello CodeSandbox</h1> }`} template="react" />
 
 :::note
 The `main` file is also be set in the `template` or the `customSetup` and is not the same as the `entry` file. In this example, `code` will replace the `App.js` file, because that is the
 **main** file in the react template. For `vue`, this would be the `App.vue` file.
 :::
 
-If you need to pass multiple files you can use the [`customSetup` prop](/docs/getting-started/custom-content#custom-setup).
+If you need to pass multiple files you can use the [`customSetup` prop](/getting-started/custom-content#custom-setup).
 
 `SandpackRunner` is already powering the popular [`code-hike` library](https://github.com/code-hike/codehike), maintained by Rodrigo Pombo.
 

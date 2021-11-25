@@ -100,3 +100,13 @@ dist
 
 # TernJS port file
 .tern-port
+
+# IDEs
+.idea
+
+# Mac
+.DS_Store
+
+# Autogenerate docs
+website/docs/docs/api/client
+website/docs/docs/api/react
